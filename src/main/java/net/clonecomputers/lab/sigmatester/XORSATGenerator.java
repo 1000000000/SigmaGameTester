@@ -17,6 +17,7 @@ public class XORSATGenerator {
 			String n = JOptionPane.showInputDialog("Enter n");
 			matrix = generateXorSat(Integer.parseInt(k), Integer.parseInt(n));
 		}
+		JOptionPane.showMessageDialog(null, matrix);
 		System.out.println(matrix);
 	}
 	
