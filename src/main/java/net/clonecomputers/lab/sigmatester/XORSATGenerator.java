@@ -19,6 +19,11 @@ public class XORSATGenerator {
 		}
 		JOptionPane.showMessageDialog(null, matrix);
 		System.out.println(matrix);
+		if(JOptionPane.showConfirmDialog(null, "Convert to Sigma Game?", "Continue?", JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
+			SigmaGame game = SigmaGameConverter.convertToSigmaGame(matrix);
+			JOptionPane.showMessageDialog(null, game);
+			System.out.println(game);
+		}
 	}
 	
 	public static Matrix<Rational> generateXorSat(int k, int n) {
