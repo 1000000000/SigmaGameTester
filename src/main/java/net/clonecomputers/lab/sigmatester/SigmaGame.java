@@ -1,49 +1,40 @@
 package net.clonecomputers.lab.sigmatester;
 
-import java.util.Set;
-
-import org.jscience.mathematics.number.Rational;
-import org.jscience.mathematics.vector.Matrix;
-import org.jscience.mathematics.vector.Vector;
+import Jama.Matrix;
 
 public class SigmaGame {
 
-	private final Matrix<Rational> adjMatrix;
-	private final Vector<Rational> delta;
+	private final Matrix adjMatrix;
+	private final double[] delta;
 
-	public SigmaGame(Matrix<Rational> adjacencyMatrix, Vector<Rational> delta) {
-		if (!adjacencyMatrix.isSquare()) throw new IllegalArgumentException("Adjacency matrix must be square");
-		if (adjacencyMatrix.getNumberOfRows() != delta.getDimension()) throw new IllegalArgumentException("The adjancey matrix must have the same dimensions as the delta vector");
+	public SigmaGame(Matrix adjacencyMatrix, double[] delta) {
+		if (adjacencyMatrix.getRowDimension() != adjacencyMatrix.getColumnDimension()) throw new IllegalArgumentException("Adjacency matrix must be square");
+		if (adjacencyMatrix.getRowDimension() != delta.length) throw new IllegalArgumentException("The adjancey matrix must have the same dimensions as the delta vector");
 		adjMatrix = adjacencyMatrix;
 		this.delta = delta;
 	}
 
-	public Matrix<Rational> getAdjacencyMatrix() {
+	public Matrix getAdjacencyMatrix() {
 		return adjMatrix;
 	}
 
-	public Vector<Rational> getDelta() {
+	public double[] getDelta() {
 		return delta;
 	}
 
 	public String toString() {
-		String[] matrixLines = adjMatrix.toString().split("\n");
-		String[] deltaLines = delta.toString().split(" ");
 		StringBuilder str = new StringBuilder();
-		for(int i = 0; i < matrixLines.length; ++i) {
-			str.append(matrixLines[i]);
-			str.append(" ");
-			str.append(deltaLines[i]);
-			str.append("\n");
+		for(int i = 0; i < adjMatrix.getArray().length; ++i) {
+			str.append("|");
+			for(double d : adjMatrix.getArray()[i]) {
+				str.append(Math.round(d));
+				str.append(' ');
+			}
+			str.deleteCharAt(str.length()-1);
+			str.append("| |");
+			str.append(Math.round(delta[i]));
+			str.append("|\n");
 		}
 		return str.toString();
-	}
-	
-	public Set<Vector<Rational>> solve() {
-		
-	}
-	
-	public int corank() {
-		return adjMatrix.
 	}
 }

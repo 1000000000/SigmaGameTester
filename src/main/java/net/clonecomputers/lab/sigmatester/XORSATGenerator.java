@@ -1,6 +1,11 @@
 package net.clonecomputers.lab.sigmatester;
 
+import java.awt.Font;
+import java.io.PrintWriter;
+import java.io.StringWriter;
+
 import javax.swing.JOptionPane;
+import javax.swing.UIManager;
 
 import Jama.Matrix;
 
@@ -15,14 +20,18 @@ public class XORSATGenerator {
 			String n = JOptionPane.showInputDialog("Enter n");
 			matrix = generateXorSat(Integer.parseInt(k), Integer.parseInt(n));
 		}
-		JOptionPane.showMessageDialog(null, matrix);
+		StringWriter sw = new StringWriter();
+		matrix.print(new PrintWriter(sw), 2, 0);
+		sw.flush();
+		UIManager.put("OptionPane.messageFont", new Font("Monospaced", Font.PLAIN, 12));
+		JOptionPane.showMessageDialog(null, sw);
 		matrix.print(2, 0);
-		System.out.printf("Rank of Matrix: %d", matrix.rank());
-		/*if(JOptionPane.showConfirmDialog(null, "Convert to Sigma Game?", "Continue?", JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
+		System.out.printf("Rank of Matrix: %d\n", matrix.rank());
+		if(JOptionPane.showConfirmDialog(null, "Convert to Sigma Game?", "Continue?", JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
 			SigmaGame game = SigmaGameConverter.convertToSigmaGame(matrix);
 			JOptionPane.showMessageDialog(null, game);
 			System.out.println(game);
-		}*/
+		}
 	}
 	
 	public static Matrix generateXorSat(int k, int n) {

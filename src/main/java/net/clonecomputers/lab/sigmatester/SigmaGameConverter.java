@@ -2,50 +2,45 @@ package net.clonecomputers.lab.sigmatester;
 
 import java.util.Arrays;
 
-import org.jscience.mathematics.number.Rational;
-import org.jscience.mathematics.vector.DenseMatrix;
-import org.jscience.mathematics.vector.DenseVector;
-import org.jscience.mathematics.vector.Matrix;
+import Jama.Matrix;
 
 public class SigmaGameConverter {
 
-	public static final Rational NEG_ONE = Rational.valueOf(-1, 1);
-
-	public static SigmaGame convertToSigmaGame(Matrix<Rational> toConvert) {
-		int dim = Math.max(toConvert.getNumberOfRows(), toConvert.getNumberOfColumns());
-		DenseMatrix<Rational> matrix = null;
-		@SuppressWarnings("unchecked")
-		DenseVector<Rational>[] matrixArray = new DenseVector[dim];
-		Rational[] deltaArray = new Rational[dim];
-		if(toConvert.getNumberOfRows() < dim) {
-			for(int i = 0; i < toConvert.getNumberOfRows(); ++i) {
-				matrixArray[i] = DenseVector.valueOf(toConvert.getRow(i));
+	public static SigmaGame convertToSigmaGame(Matrix toConvert) {
+		int dim = Math.max(toConvert.getRowDimension(), toConvert.getColumnDimension());
+		Matrix matrix = null;
+		double[][] matrixArray = new double[dim][dim];
+		double[] deltaArray = new double[dim];
+		if(toConvert.getRowDimension() < dim) {
+			double[][] toConvertArray = toConvert.getArray();
+			for(int i = 0; i < toConvert.getRowDimension(); ++i) {
+				matrixArray[i] = toConvertArray[i];
 			}
-			Arrays.fill(matrixArray, toConvert.getNumberOfRows() + 1, dim - 1, toConvert.getRow(0));
-			matrix = DenseMatrix.valueOf(matrixArray);
-		} else if(toConvert.getNumberOfColumns() < dim) {
-			for(int i = 0; i < toConvert.getNumberOfColumns(); ++i) {
-				matrixArray[i] = DenseVector.valueOf(toConvert.getColumn(i));
+			Arrays.fill(matrixArray, toConvert.getRowDimension() + 1, dim - 1, toConvertArray[0]);
+			matrix = Matrix.constructWithCopy(matrixArray);
+		} else if(toConvert.getColumnDimension() < dim) {
+			for(int i = 0; i < toConvert.getColumnDimension(); ++i) {
+				matrixArray[i] = toConvert.getColumnVector(i);
 			}
-			Rational[] fillerArray = new Rational[dim];
-			Arrays.fill(fillerArray, Rational.ZERO);
-			DenseVector<Rational> filler = DenseVector.valueOf(fillerArray);
-			Arrays.fill(matrixArray, toConvert.getNumberOfColumns() + 1, dim - 1, filler);
-			matrix = DenseMatrix.valueOf(matrixArray).transpose();
+			double[] fillerArray = new double[dim];
+			Arrays.fill(matrixArray, toConvert.getColumnDimension() + 1, dim - 1, fillerArray);
+			matrix = Matrix.constructWithCopy(matrixArray).transpose();
 		} else {
-			matrix = DenseMatrix.valueOf(toConvert);
+			matrix = toConvert.copy();
 		}
 		for(int i = 0; i < dim; ++i) {
-			Rational deltaValue = Rational.ONE;
-			DenseVector<Rational> row = matrix.getRow(i);
-			for(int j = 0; j < dim; ++j) {
-				Rational value = row.get(j);			
-				if(!value.equals(Rational.ZERO)) deltaValue = deltaValue.times(value);
+			int deltaValue = 1;
+			double[] row = matrix.getArray()[i];
+			for(int j = 0; j < dim; ++j) {		
+				if(row[j] != 0) {
+					deltaValue *= Math.round(row[j]);
+					row[j] = 1;
+				}
 			}
-			if(deltaValue.equals(NEG_ONE)) deltaValue = Rational.ZERO;
+			if(deltaValue == -1) deltaValue = 0;
 			deltaArray[i] = deltaValue;
 		}
-		return new SigmaGame(matrix, DenseVector.valueOf(deltaArray));
+		return new SigmaGame(matrix, deltaArray);
 	}
 
 }
