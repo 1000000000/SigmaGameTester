@@ -3,6 +3,7 @@ package net.clonecomputers.lab.sigmatester;
 import java.awt.Font;
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.util.Arrays;
 
 import javax.swing.JOptionPane;
 import javax.swing.UIManager;
@@ -31,6 +32,11 @@ public class XORSATGenerator {
 			SigmaGame game = SigmaGameConverter.convertToSigmaGame(matrix);
 			JOptionPane.showMessageDialog(null, game);
 			System.out.println(game);
+			if(game.getAdjacencyMatrix().rank() == game.getAdjacencyMatrix().getRowDimension() && JOptionPane.showConfirmDialog(null, "Solve?", "Continue?", JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
+				String result = Arrays.deepToString(game.solve().toArray());
+				JOptionPane.showMessageDialog(null, result);
+				System.out.println(result);
+			}
 		}
 	}
 	

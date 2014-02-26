@@ -40,7 +40,7 @@ public class SigmaGameConverter {
 			if(deltaValue == -1) deltaValue = 0;
 			deltaArray[i] = deltaValue;
 		}
-		return new SigmaGame(matrix, deltaArray);
+		return new SigmaGame(matrix, new Matrix(deltaArray, matrix.getRowDimension()));
 	}
 
 }

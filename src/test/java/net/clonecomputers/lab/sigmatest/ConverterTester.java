@@ -39,7 +39,7 @@ public class ConverterTester {
 							rowSign *= -1;
 						}
 					}
-					assertEquals((rowSign + 1)/2, Math.round(g.getDelta()[i]));
+					assertEquals((rowSign + 1)/2, Math.round(g.getDelta().get(0, i)));
 				}
 			}
 		} catch(Exception e) {
