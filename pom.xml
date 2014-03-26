@@ -4,7 +4,7 @@
    <modelVersion>4.0.0</modelVersion>
    <groupId>net.clonecomputers.lab</groupId>
    <artifactId>SigmaGameTester</artifactId>
-   <version>0.4.2</version>
+   <version>0.5.0-SNAPSHOT</version>
    <name>Sigma Game Tester</name>
    <description>Tests a method of solving the sigma game</description>
 
